@@ -7,25 +7,37 @@ import java.util.Observable;
 
 public class View implements Observer {
     
-    ClockPanel panel;
+    AnalogClockPanel panel;
     
     public View(Model model) {
         JFrame frame = new JFrame();
         
         
-        panel = new ClockPanel(model);
+        panel = new AnalogClockPanel(model);
         
         //Added code so far--------------------- TODO think about abstract jframe? moving variables initialisation?
         Container pane = frame.getContentPane();
         
         JButton about = new JButton("About");
         
+        JMenuBar menuBar = new JMenuBar(); 
+        JMenu menu = new JMenu("Clock");
+        JMenuItem menuAbout = new JMenuItem("About");
+        
+        menu.add(menuAbout);
+        menuBar.add(menu);
+        
+        frame.setJMenuBar(menuBar);
+        
         ClickActionListener clickListen = new ClickActionListener();
         
         about.addActionListener(clickListen);
+        menuAbout.addActionListener(clickListen);
         
         pane.add(panel, BorderLayout.CENTER);
         pane.add(about, BorderLayout.PAGE_END);
+        
+        
         //---------------------------------------
         
         frame.setContentPane(pane);
