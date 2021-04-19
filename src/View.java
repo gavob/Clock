@@ -1,4 +1,6 @@
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.*;
 import java.util.Observer;
 import java.util.Observable;
@@ -9,8 +11,24 @@ public class View implements Observer {
     
     public View(Model model) {
         JFrame frame = new JFrame();
+        
+        
         panel = new ClockPanel(model);
-        frame.setContentPane(panel);
+        
+        //Added code so far--------------------- TODO think about abstract jframe? moving variables initialisation?
+        Container pane = frame.getContentPane();
+        
+        JButton about = new JButton("About");
+        
+        ClickActionListener clickListen = new ClickActionListener();
+        
+        about.addActionListener(clickListen);
+        
+        pane.add(panel, BorderLayout.CENTER);
+        pane.add(about, BorderLayout.PAGE_END);
+        //---------------------------------------
+        
+        frame.setContentPane(pane);
         frame.setTitle("Java Clock");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
@@ -19,5 +37,16 @@ public class View implements Observer {
     
     public void update(Observable o, Object arg) {
         panel.repaint();
+    }
+    
+    // Inner class for actionlistener
+    
+    class ClickActionListener extends JComponent implements ActionListener  {
+
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+            JOptionPane.showMessageDialog(this, "Java Clock by Gavin Bruce");
+        }
+    
     }
 }
