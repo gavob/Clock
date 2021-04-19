@@ -4,16 +4,22 @@ import java.awt.geom.*;
 import java.awt.font.*;
 import javax.swing.*;
 
-public class AnalogClockPanel extends JPanel{
-    
-    Model model;
-    
+public class AnalogClockPanel extends ClockPanel { 
+
     public AnalogClockPanel(Model m) {
+        super(m);
+    }
+    //JPanel moved to abstract class
+    
+    //Model model; moved to abstract class
+    
+    /*public AnalogClockPanel(Model m) {
         model = m;
         setPreferredSize(new Dimension(200, 200));
         setBackground(Color.white);
-    }
+    }*/
     
+    @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         
@@ -98,5 +104,6 @@ public class AnalogClockPanel extends JPanel{
         x1 = x0 + radius * Math.cos(theta);
         y1 = y0 - radius * Math.sin(theta);
         gg.draw(new Line2D.Double(x0, y0, x1, y1));
+       
     }
 }
