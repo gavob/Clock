@@ -7,13 +7,13 @@ import java.util.Observable;
 
 public class View implements Observer {
     
-    AnalogClockPanel panel;
+    ClockPanel panel;
     
     public View(Model model) {
         JFrame frame = new JFrame();
         
         
-        panel = new AnalogClockPanel(model);
+        panel = new DigitalClockPanel(model);
         
         //Added code so far--------------------- TODO think about abstract jframe? moving variables initialisation?
         Container pane = frame.getContentPane();

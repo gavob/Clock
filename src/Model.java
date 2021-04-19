@@ -10,6 +10,8 @@ public class Model extends Observable {
     
     int oldSecond = 0;
     
+    String amPm;
+    
     public Model() {
         update();
     }
@@ -24,5 +26,7 @@ public class Model extends Observable {
             setChanged();
             notifyObservers();
         }
+        if (date.get(Calendar.AM_PM) == Calendar.PM) amPm = "pm";
+        else amPm = "am";
     }
 }
