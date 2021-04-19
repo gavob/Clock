@@ -1,4 +1,6 @@
 
+import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import javax.swing.JPanel;
 
@@ -14,6 +16,12 @@ import javax.swing.JPanel;
  */
 public abstract class ClockPanel extends JPanel {
     
+    public Model model;
     
+    public ClockPanel(Model m) {
+        model = m;
+        setPreferredSize(new Dimension(200, 200));
+        setBackground(Color.white);
+    }
     
 }
