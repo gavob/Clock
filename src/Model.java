@@ -1,8 +1,15 @@
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Observable;
 //import java.util.GregorianCalendar;
 
 public class Model extends Observable {
+    DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+    
+    String display = "analog";
+    
+    String day;
     
     int hour = 0;
     int minute = 0;
@@ -18,6 +25,8 @@ public class Model extends Observable {
     
     public void update() {
         Calendar date = Calendar.getInstance();
+        
+        day = dateFormat.format(date);
         hour = date.get(Calendar.HOUR);
         minute = date.get(Calendar.MINUTE);
         oldSecond = second;
@@ -28,5 +37,6 @@ public class Model extends Observable {
         }
         if (date.get(Calendar.AM_PM) == Calendar.PM) amPm = "pm";
         else amPm = "am";
+        
     }
 }
