@@ -8,6 +8,8 @@ import java.util.Observable;
 public class View extends JFrame {
     
     ClockPanel panel;
+    //JLabel date; // SHOULD BE USING DATE OBSERVER
+    DateLabel date;
     
     public View(Model model) {
     
@@ -17,34 +19,40 @@ public class View extends JFrame {
         //--------------------- TODO moving variables initialisation?
         Container pane = getContentPane();
         
-        JButton about = new JButton("About");
-        
+        //date = new JLabel(model.day); //SHOULD BE USING DATE OBSERVER CLASS SO AS TO LISTEN TO UPDATES
+        date = new DateLabel(model);
+         
         JMenuBar menuBar = new JMenuBar(); 
         JMenu menu = new JMenu("Clock");
         JMenu addClock = new JMenu("Add Clock");
         JMenuItem analog = new JMenuItem("Analog");
         JMenuItem digital = new JMenuItem("Digital");
+        JCheckBoxMenuItem dateDisplay = new JCheckBoxMenuItem("Display Date");
         JMenuItem menuAbout = new JMenuItem("About");
         
         addClock.add(analog);
         addClock.add(digital);
         
         menu.add(addClock);
+        menu.add(dateDisplay);
         menu.add(menuAbout);
         
         menuBar.add(menu);
         
         setJMenuBar(menuBar);
         
+        date.setVisible(false);
+        //date.
+        
         ClickActionListener clickListen = new ClickActionListener();
         
         analog.addActionListener(clickListen);
         digital.addActionListener(clickListen);
-        about.addActionListener(clickListen);
+        dateDisplay.addActionListener(clickListen);
         menuAbout.addActionListener(clickListen);
         
         pane.add(panel, BorderLayout.CENTER);
-        pane.add(about, BorderLayout.PAGE_END);
+        pane.add(date, BorderLayout.PAGE_END); //SHOULD BE ADDING DATE LIKE THE CLOCK PANEL
         
         
         //---------------------------------------
@@ -56,12 +64,6 @@ public class View extends JFrame {
         setVisible(true);
     }
     
-    /*
-    public void update(Observable o, Object arg) {
-        panel.repaint();
-    }
-    */
-    
     // Inner class for actionlistener TODO does this effectively follow MVC pattern?
     class ClickActionListener extends JComponent implements ActionListener  {
         @Override
@@ -70,12 +72,13 @@ public class View extends JFrame {
                 JOptionPane.showMessageDialog(this, "Java Clock by Gavin Bruce");
             } else if("Analog".equals(ae.getActionCommand())) {
                 panel.model.display = "analog";
-                //panel.model.addObserver(new View(new DigitalClockPanel(panel.model)));
                 new View(panel.model);
             } else if("Digital".equals(ae.getActionCommand())) {
                 panel.model.display = "digital";
-                //panel.model.addObserver(new DigitalClockPanel(panel.model));
                 new View(panel.model);
+            } else if("Display Date".equals(ae.getActionCommand())) {
+                if(date.isVisible()) date.setVisible(false); // MAY NEED CHANGED AFTER ABOVE DATE CHANGES
+                else date.setVisible(true);
             }
         }
     

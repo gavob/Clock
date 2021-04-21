@@ -24,7 +24,7 @@ public abstract class ClockPanel extends JPanel implements Observer {
         model = m;
         setPreferredSize(new Dimension(200, 200));
         setBackground(Color.white);
-        model.addObserver(this); //who knows if this will work
+        model.addObserver(this); 
     }
     
     @Override
