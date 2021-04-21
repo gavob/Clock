@@ -2,6 +2,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.*;
 import java.awt.font.*;
+import java.util.Observable;
 import javax.swing.*;
 
 public class AnalogClockPanel extends ClockPanel { 
@@ -106,4 +107,6 @@ public class AnalogClockPanel extends ClockPanel {
         gg.draw(new Line2D.Double(x0, y0, x1, y1));
        
     }
+
+    
 }

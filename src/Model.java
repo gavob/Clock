@@ -5,7 +5,7 @@ import java.util.Observable;
 //import java.util.GregorianCalendar;
 
 public class Model extends Observable {
-    DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+    SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
     
     String display = "analog";
     
@@ -26,7 +26,8 @@ public class Model extends Observable {
     public void update() {
         Calendar date = Calendar.getInstance();
         
-        day = dateFormat.format(date);
+        day = dateFormat.format(date.getTime()); //Needs checked for formatting
+        
         hour = date.get(Calendar.HOUR);
         minute = date.get(Calendar.MINUTE);
         oldSecond = second;

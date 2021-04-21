@@ -5,7 +5,7 @@ import javax.swing.*;
 import java.util.Observer;
 import java.util.Observable;
 
-public class View extends JFrame implements Observer {
+public class View extends JFrame {
     
     ClockPanel panel;
     
@@ -56,9 +56,11 @@ public class View extends JFrame implements Observer {
         setVisible(true);
     }
     
+    /*
     public void update(Observable o, Object arg) {
         panel.repaint();
     }
+    */
     
     // Inner class for actionlistener TODO does this effectively follow MVC pattern?
     class ClickActionListener extends JComponent implements ActionListener  {
@@ -68,11 +70,12 @@ public class View extends JFrame implements Observer {
                 JOptionPane.showMessageDialog(this, "Java Clock by Gavin Bruce");
             } else if("Analog".equals(ae.getActionCommand())) {
                 panel.model.display = "analog";
-                panel.model.addObserver(new View(panel.model));
+                //panel.model.addObserver(new View(new DigitalClockPanel(panel.model)));
+                new View(panel.model);
             } else if("Digital".equals(ae.getActionCommand())) {
                 panel.model.display = "digital";
-                panel.model.addObserver(new View(panel.model));
-                
+                //panel.model.addObserver(new DigitalClockPanel(panel.model));
+                new View(panel.model);
             }
         }
     

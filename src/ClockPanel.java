@@ -2,6 +2,8 @@
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.util.Observable;
+import java.util.Observer;
 import javax.swing.JPanel;
 
 /*
@@ -14,7 +16,7 @@ import javax.swing.JPanel;
  *
  * @author Gav
  */
-public abstract class ClockPanel extends JPanel {
+public abstract class ClockPanel extends JPanel implements Observer {
     
     public Model model;
     
@@ -22,6 +24,11 @@ public abstract class ClockPanel extends JPanel {
         model = m;
         setPreferredSize(new Dimension(200, 200));
         setBackground(Color.white);
+        model.addObserver(this); //who knows if this will work
     }
     
+    @Override
+    public void update(Observable o, Object o1) {
+        this.repaint();
+    }
 }
