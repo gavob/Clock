@@ -28,7 +28,7 @@ public class DateLabel extends JLabel implements Observer {
         model = m;
         setPreferredSize(new Dimension(200, 30));
         setBackground(Color.gray);
-        model.addObserver(this); //who knows if this will work
+        model.addObserver(this);
     }
 
     @Override
@@ -40,19 +40,7 @@ public class DateLabel extends JLabel implements Observer {
     public void paintComponent(Graphics g) { 
         super.paintComponent(g);
         
-        //Rectangle bounds = getBounds();
-        
-        
         setText(model.day);
-        
-        //String date = model.day;
-        
-        //Font font = new Font("SansSerif", Font.BOLD, 10);
-        
-        //gg.setFont(font);
-        
-        //gg.drawString(date, 15, 0);
-        //Label date = new JLabel(model.day);
     }
     
 }

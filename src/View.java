@@ -8,7 +8,6 @@ import java.util.Observable;
 public class View extends JFrame {
     
     ClockPanel panel;
-    //JLabel date; // SHOULD BE USING DATE OBSERVER
     DateLabel date;
     
     public View(Model model) {
@@ -16,10 +15,8 @@ public class View extends JFrame {
         if("analog".equals(model.display)) panel = new AnalogClockPanel(model);
         else panel = new DigitalClockPanel(model);
         
-        //--------------------- TODO moving variables initialisation?
         Container pane = getContentPane();
         
-        //date = new JLabel(model.day); //SHOULD BE USING DATE OBSERVER CLASS SO AS TO LISTEN TO UPDATES
         date = new DateLabel(model);
          
         JMenuBar menuBar = new JMenuBar(); 
@@ -42,7 +39,6 @@ public class View extends JFrame {
         setJMenuBar(menuBar);
         
         date.setVisible(false);
-        //date.
         
         ClickActionListener clickListen = new ClickActionListener();
         
@@ -52,10 +48,7 @@ public class View extends JFrame {
         menuAbout.addActionListener(clickListen);
         
         pane.add(panel, BorderLayout.CENTER);
-        pane.add(date, BorderLayout.PAGE_END); //SHOULD BE ADDING DATE LIKE THE CLOCK PANEL
-        
-        
-        //---------------------------------------
+        pane.add(date, BorderLayout.PAGE_END); 
         
         setContentPane(pane);
         setTitle("Java Clock");
@@ -77,7 +70,7 @@ public class View extends JFrame {
                 panel.model.display = "digital";
                 new View(panel.model);
             } else if("Display Date".equals(ae.getActionCommand())) {
-                if(date.isVisible()) date.setVisible(false); // MAY NEED CHANGED AFTER ABOVE DATE CHANGES
+                if(date.isVisible()) date.setVisible(false); 
                 else date.setVisible(true);
             }
         }
