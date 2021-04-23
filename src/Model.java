@@ -11,6 +11,8 @@ public class Model extends Observable {
     
     String day;
     
+    Alarm alarm;
+    
     int hour = 0;
     int minute = 0;
     int second = 0;

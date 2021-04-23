@@ -1,6 +1,7 @@
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Date;
 import javax.swing.*;
 import java.util.Observer;
 import java.util.Observable;
@@ -25,6 +26,7 @@ public class View extends JFrame {
         JMenuItem analog = new JMenuItem("Analog");
         JMenuItem digital = new JMenuItem("Digital");
         JCheckBoxMenuItem dateDisplay = new JCheckBoxMenuItem("Display Date");
+        JMenuItem addAlarm = new JMenuItem("Add Alarm");
         JMenuItem menuAbout = new JMenuItem("About");
         
         addClock.add(analog);
@@ -32,10 +34,10 @@ public class View extends JFrame {
         
         menu.add(addClock);
         menu.add(dateDisplay);
+        menu.add(addAlarm);
         menu.add(menuAbout);
         
         menuBar.add(menu);
-        
         setJMenuBar(menuBar);
         
         date.setVisible(false);
@@ -45,6 +47,7 @@ public class View extends JFrame {
         analog.addActionListener(clickListen);
         digital.addActionListener(clickListen);
         dateDisplay.addActionListener(clickListen);
+        addAlarm.addActionListener(clickListen);
         menuAbout.addActionListener(clickListen);
         
         pane.add(panel, BorderLayout.CENTER);
@@ -72,6 +75,8 @@ public class View extends JFrame {
             } else if("Display Date".equals(ae.getActionCommand())) {
                 if(date.isVisible()) date.setVisible(false); 
                 else date.setVisible(true);
+            } else if("Add Alarm".equals(ae.getActionCommand())) {
+                new AlarmSetter(panel.model);
             }
         }
     

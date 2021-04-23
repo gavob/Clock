@@ -6,6 +6,6 @@ public class Clock {
         //model.addObserver(view); // No longer necessary
         Controller controller = new Controller(model, view);
         
-        new Alarm(model,8,23,"pm"); // Test
+        //new Alarm(model,8,54,"am"); // Test
     }
 }

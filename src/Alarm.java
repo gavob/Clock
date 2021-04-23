@@ -38,7 +38,7 @@ public class Alarm implements Observer {
     @Override
     public void update(Observable o, Object o1) {
         //Can alarm be activated from here? aye
-        if(model.hour==hour && model.minute==minute && model.amPm==amPm)
+        if(model.hour==hour && model.minute==minute && model.second == 0 && model.amPm==amPm && active) //needs tested again
             JOptionPane.showMessageDialog(null,"ALARM");
     }
     
