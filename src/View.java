@@ -1,17 +1,18 @@
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Date;
 import javax.swing.*;
-import java.util.Observer;
-import java.util.Observable;
 
 public class View extends JFrame {
     
+    Model model;
     ClockPanel panel;
     DateLabel date;
+    AlarmLabel alarm;
     
-    public View(Model model) {
+    public View(Model m) {
+        
+        model = m;
     
         if("analog".equals(model.display)) panel = new AnalogClockPanel(model);
         else panel = new DigitalClockPanel(model);
@@ -19,6 +20,7 @@ public class View extends JFrame {
         Container pane = getContentPane();
         
         date = new DateLabel(model);
+        alarm = new AlarmLabel(model);
          
         JMenuBar menuBar = new JMenuBar(); 
         JMenu menu = new JMenu("Clock");
@@ -27,6 +29,7 @@ public class View extends JFrame {
         JMenuItem digital = new JMenuItem("Digital");
         JCheckBoxMenuItem dateDisplay = new JCheckBoxMenuItem("Display Date");
         JMenuItem addAlarm = new JMenuItem("Add Alarm");
+        JMenuItem editAlarm = new JMenuItem("Edit Alarm");
         JMenuItem menuAbout = new JMenuItem("About");
         
         addClock.add(analog);
@@ -35,6 +38,7 @@ public class View extends JFrame {
         menu.add(addClock);
         menu.add(dateDisplay);
         menu.add(addAlarm);
+        menu.add(editAlarm);
         menu.add(menuAbout);
         
         menuBar.add(menu);
@@ -50,6 +54,7 @@ public class View extends JFrame {
         addAlarm.addActionListener(clickListen);
         menuAbout.addActionListener(clickListen);
         
+        pane.add(alarm, BorderLayout.PAGE_START); 
         pane.add(panel, BorderLayout.CENTER);
         pane.add(date, BorderLayout.PAGE_END); 
         
@@ -67,16 +72,22 @@ public class View extends JFrame {
             if("About".equals(ae.getActionCommand())) {
                 JOptionPane.showMessageDialog(this, "Java Clock by Gavin Bruce");
             } else if("Analog".equals(ae.getActionCommand())) {
-                panel.model.display = "analog";
-                new View(panel.model);
+                model.display = "analog";
+                new View(model);
             } else if("Digital".equals(ae.getActionCommand())) {
-                panel.model.display = "digital";
-                new View(panel.model);
+                model.display = "digital";
+                new View(model);
             } else if("Display Date".equals(ae.getActionCommand())) {
                 if(date.isVisible()) date.setVisible(false); 
                 else date.setVisible(true);
             } else if("Add Alarm".equals(ae.getActionCommand())) {
-                new AlarmSetter(panel.model);
+                AlarmPanel setAlarm = new AlarmPanel(model);
+                int result = JOptionPane.showConfirmDialog(this, setAlarm, "Set Alarm", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+                
+                if(result  == JOptionPane.OK_OPTION) {
+                    model.alarm = new Alarm(model, setAlarm.getHour(), setAlarm.getMinute(), setAlarm.getAmPm(), setAlarm.getActive());
+                    System.out.println("Hour: "+ setAlarm.getHour()+" - Minute: "+ setAlarm.getMinute()+ " - AMPM: "+ setAlarm.getAmPm()+ " - Active: "+ setAlarm.getActive()); //DEBUG SETALARM GETTERS
+                }
             }
         }
     

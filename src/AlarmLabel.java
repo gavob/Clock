@@ -1,14 +1,11 @@
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Rectangle;
 import java.util.Observable;
 import java.util.Observer;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
+import javax.swing.JOptionPane;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -20,16 +17,16 @@ import javax.swing.JPanel;
  *
  * @author Gav
  */
-public class DateLabel extends JLabel implements Observer {
+public class AlarmLabel extends JLabel implements Observer {
     
     public Model model;
-    
-    public DateLabel(Model m) {
+
+    public AlarmLabel(Model m) {
         model = m;
         setPreferredSize(new Dimension(200, 30));
-        setOpaque(true);
         setHorizontalAlignment(JLabel.CENTER);
-        setBackground(Color.lightGray);
+        setOpaque(true);
+        setText("No alarms set");
         model.addObserver(this);
     }
 
@@ -42,7 +39,13 @@ public class DateLabel extends JLabel implements Observer {
     public void paintComponent(Graphics g) { 
         super.paintComponent(g);
         
-        setText(model.day);
+        if(model.alarm != null) {
+            if(model.alarm.active) setBackground(Color.green); else setBackground(Color.lightGray);
+            setText(model.alarm.getTime());
+        } else {
+            setBackground(Color.lightGray);
+            setText("No alarms set");
+        }
     }
     
 }

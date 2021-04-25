@@ -11,7 +11,7 @@ public class Model extends Observable {
     
     String day;
     
-    Alarm alarm;
+    Alarm alarm = null;
     
     int hour = 0;
     int minute = 0;
@@ -31,6 +31,7 @@ public class Model extends Observable {
         day = dateFormat.format(date.getTime()); //Needs checked for formatting
         
         hour = date.get(Calendar.HOUR);
+        if(hour==0) hour = 12; // incase it displays 0pm
         minute = date.get(Calendar.MINUTE);
         oldSecond = second;
         second = date.get(Calendar.SECOND);
