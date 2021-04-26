@@ -40,7 +40,7 @@ public class AlarmLabel extends JLabel implements Observer {
         super.paintComponent(g);
         
         if(model.alarm != null) {
-            if(model.alarm.active) setBackground(Color.green); else setBackground(Color.lightGray);
+            if(model.alarm.getActive()) setBackground(Color.green); else setBackground(Color.lightGray);
             setText(model.alarm.getTime());
         } else {
             setBackground(Color.lightGray);

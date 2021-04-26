@@ -27,24 +27,49 @@ public class AlarmPanel extends JPanel {
     private ButtonGroup bg;
     private JCheckBox active;
     
+    /*
+    panelHour
+    panelMinute
+    panelAmPm
+    panelActive
+    */
+    
     public AlarmPanel(Model m) {
+        int panelHour = m.hour;
+        int panelMinute = m.minute;
+        String panelAmPm = m.amPm;
+        boolean panelActive = true;
+        
+        buildPanel(panelHour, panelMinute, panelAmPm, panelActive);
+    }
+    
+    public AlarmPanel(Alarm a) {
+        int panelHour = a.getHour();
+        int panelMinute = a.getMinute();
+        String panelAmPm = a.getAmPm();
+        boolean panelActive = a.getActive();
+        
+        buildPanel(panelHour, panelMinute, panelAmPm, panelActive);
+    }
+    
+    public void buildPanel(int hr, int min, String ap, boolean act) {
         setPreferredSize(new Dimension(40, 80));
         
         JLabel hrLabel = new JLabel("Hour");
         JLabel mnLabel = new JLabel("Minute");
         JLabel aLabel = new JLabel("Active:");
-        JRadioButton am = new JRadioButton();    
-        JRadioButton pm = new JRadioButton();
+        JRadioButton am = new JRadioButton("am");    
+        JRadioButton pm = new JRadioButton("pm");
         active = new JCheckBox("active");
         bg = new ButtonGroup();
         bg.add(am);
         bg.add(pm);
         
-        SpinnerModel hourValue = new SpinnerNumberModel(m.hour, //initial value  
+        SpinnerModel hourValue = new SpinnerNumberModel(hr, //initial value  
                 1, //minimum value  
                 12, //maximum value  
                 1); //step
-        SpinnerModel minuteValue = new SpinnerNumberModel(m.minute, //initial value  
+        SpinnerModel minuteValue = new SpinnerNumberModel(min, //initial value  
                 0, //minimum value  
                 59, //maximum value  
                 1); //step
@@ -66,10 +91,10 @@ public class AlarmPanel extends JPanel {
         am.setActionCommand("am");
         pm.setActionCommand("pm");
         
-        if("am".equals(m.amPm)) am.setSelected(true);
+        if("am".equals(ap)) am.setSelected(true);
         else pm.setSelected(true);
         
-        active.setSelected(true);
+        active.setSelected(act);
     }
     
     public int getHour() {

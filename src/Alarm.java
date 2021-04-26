@@ -14,12 +14,12 @@ import javax.swing.JOptionPane;
  */
 public class Alarm implements Observer {
     
-    public Model model;
+    private Model model;
     
-    public int hour;
-    public int minute;
-    public String amPm;
-    public boolean active;
+    private int hour;
+    private int minute;
+    private String amPm;
+    private boolean active;
     
     public Alarm(Model m, int hr, int min, String ap, boolean act) {
         model = m;
@@ -29,6 +29,13 @@ public class Alarm implements Observer {
         minute = min;
         amPm = ap;
         active = act; 
+    }
+
+    @Override
+    public void update(Observable o, Object o1) {
+        //Can alarm be activated from here? aye
+        if(model.hour==hour && model.minute==minute && model.second == 0 && model.amPm==amPm && active)
+            JOptionPane.showMessageDialog(null,"ALARM");
     }
     
     public void setActive(boolean isActive) {
@@ -46,12 +53,21 @@ public class Alarm implements Observer {
         
         return time;
     }
-
-    @Override
-    public void update(Observable o, Object o1) {
-        //Can alarm be activated from here? aye
-        if(model.hour==hour && model.minute==minute && model.second == 0 && model.amPm==amPm && active)
-            JOptionPane.showMessageDialog(null,"ALARM");
+    
+    public int getHour() {
+        return hour;
+    }
+    
+    public int getMinute() {
+        return minute;
+    }
+    
+    public String getAmPm() {
+        return amPm;
+    }
+    
+    public boolean getActive() {
+        return active;
     }
     
 }
