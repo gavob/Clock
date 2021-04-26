@@ -22,27 +22,27 @@ import javax.swing.JPanel;
  */
 public class DateLabel extends JLabel implements Observer {
     
-    public Model model;
+    private Model model;
     
     public DateLabel(Model m) {
         model = m;
-        setPreferredSize(new Dimension(200, 30));
-        setOpaque(true);
-        setHorizontalAlignment(JLabel.CENTER);
-        setBackground(Color.lightGray);
-        model.addObserver(this);
+        setPreferredSize(new Dimension(200, 30)); // Sets size of label
+        setOpaque(true); // Removes transparency from label
+        setHorizontalAlignment(JLabel.CENTER); // Aligns labels text to the center
+        setBackground(Color.lightGray); // Sets labels background colour
+        model.addObserver(this); // Sets this label as an observer of the model
     }
 
     @Override
     public void update(Observable o, Object o1) {
-        this.repaint();
+        this.repaint(); // Calls to recreate the display in every change of the model
     }
     
     @Override
     public void paintComponent(Graphics g) { 
-        super.paintComponent(g);
+        super.paintComponent(g); // Calls this method from its parent class
         
-        setText(model.day);
+        setText(model.day); // Sets the text of this label as the current date from the model
     }
     
 }

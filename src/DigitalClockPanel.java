@@ -16,14 +16,14 @@ import java.awt.Rectangle;
 public class DigitalClockPanel extends ClockPanel {
     
     public DigitalClockPanel(Model m) {
-        super(m);
+        super(m); // Uses the constructor of this classes abstract class
     }
     
     @Override
     public void paintComponent(Graphics g) { 
-        super.paintComponent(g);
+        super.paintComponent(g); // Calls this method from its parent class
         
-        Rectangle bounds = getBounds();
+        Rectangle bounds = getBounds(); // Gets the size of the clocks parent frame
         
         Graphics2D gg = (Graphics2D) g;
         int x0 = bounds.width / 2;
@@ -37,13 +37,13 @@ public class DigitalClockPanel extends ClockPanel {
         
         String time;
         
-        if(hour < 10) time = "0" + hour + ":";
+        if(hour < 10) time = "0" + hour + ":"; // Adds a 0 if hour is less than 10
         else time = hour + ":";
         
-        if(min < 10) time += "0" + min + ":";
+        if(min < 10) time += "0" + min + ":"; // Adds a 0 if minute is less than 10
         else time += min + ":";
         
-        if(sec < 10) time += "0" + sec;
+        if(sec < 10) time += "0" + sec; // Adds a 0 if second is less than 10
         else time += Integer.toString(sec);
         
         time += model.amPm;
@@ -52,7 +52,7 @@ public class DigitalClockPanel extends ClockPanel {
         
         gg.setFont(font);
         
-        gg.drawString(time, 15, y0);
+        gg.drawString(time, 15, y0); // Prints time to panel
     }
 }
     

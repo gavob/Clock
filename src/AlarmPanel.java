@@ -27,33 +27,26 @@ public class AlarmPanel extends JPanel {
     private ButtonGroup bg;
     private JCheckBox active;
     
-    /*
-    panelHour
-    panelMinute
-    panelAmPm
-    panelActive
-    */
-    
-    public AlarmPanel(Model m) {
+    public AlarmPanel(Model m) { // Constructor for creating new alarm which passes model for filling out UI with current time
         int panelHour = m.hour;
         int panelMinute = m.minute;
         String panelAmPm = m.amPm;
         boolean panelActive = true;
         
-        buildPanel(panelHour, panelMinute, panelAmPm, panelActive);
+        buildPanel(panelHour, panelMinute, panelAmPm, panelActive); // Build UI with models parameters
     }
     
-    public AlarmPanel(Alarm a) {
+    public AlarmPanel(Alarm a) { // Constructor for editing an alarm by passing in an Alarm instance
         int panelHour = a.getHour();
         int panelMinute = a.getMinute();
         String panelAmPm = a.getAmPm();
         boolean panelActive = a.getActive();
         
-        buildPanel(panelHour, panelMinute, panelAmPm, panelActive);
+        buildPanel(panelHour, panelMinute, panelAmPm, panelActive); // Build UI with Alarm instance parameter
     }
     
-    public void buildPanel(int hr, int min, String ap, boolean act) {
-        setPreferredSize(new Dimension(40, 80));
+    public void buildPanel(int hr, int min, String ap, boolean act) { // Constructs UI with parameters from either constructors 
+        setPreferredSize(new Dimension(40, 80)); // Set size of panel
         
         JLabel hrLabel = new JLabel("Hour");
         JLabel mnLabel = new JLabel("Minute");
@@ -61,7 +54,7 @@ public class AlarmPanel extends JPanel {
         JRadioButton am = new JRadioButton("am");    
         JRadioButton pm = new JRadioButton("pm");
         active = new JCheckBox("active");
-        bg = new ButtonGroup();
+        bg = new ButtonGroup(); // Group for radio buttons
         bg.add(am);
         bg.add(pm);
         
@@ -77,7 +70,7 @@ public class AlarmPanel extends JPanel {
         hour = new JSpinner(hourValue);
         minute = new JSpinner(minuteValue);
         
-        setLayout(new GridLayout(4,2));
+        setLayout(new GridLayout(4,2)); // Create a grid layout for displaying UI elements
         
         add(hrLabel);
         add(mnLabel);
@@ -91,25 +84,25 @@ public class AlarmPanel extends JPanel {
         am.setActionCommand("am");
         pm.setActionCommand("pm");
         
-        if("am".equals(ap)) am.setSelected(true);
+        if("am".equals(ap)) am.setSelected(true); // Checks whether am or pm and sets initial selection of radio buttons
         else pm.setSelected(true);
         
         active.setSelected(act);
     }
     
     public int getHour() {
-        return (Integer)hour.getValue();
+        return (Integer)hour.getValue(); // Returns selected values from hour spinner and casts it as an integer
     }
     
     public int getMinute() {
-        return (Integer)minute.getValue();
+        return (Integer)minute.getValue(); // Returns selected values from minute spinner and casts it as an integer
     }
     
     public String getAmPm() {
-        return bg.getSelection().getActionCommand();
+        return bg.getSelection().getActionCommand(); // Returns selected radio buttons action command string from the button group 
     }
     
     public boolean getActive() {
-        return active.isSelected();
+        return active.isSelected(); // Returns true or false whether active checkbox is checked
     }
 }

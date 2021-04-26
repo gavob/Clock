@@ -11,13 +11,12 @@ public class View extends JFrame {
     AlarmLabel alarm;
     
     public View(Model m) {
-        
         model = m;
     
-        if("analog".equals(model.display)) panel = new AnalogClockPanel(model);
+        if("analog".equals(model.display)) panel = new AnalogClockPanel(model); // Checks whether current view should be made in digital or analog
         else panel = new DigitalClockPanel(model);
         
-        Container pane = getContentPane();
+        Container pane = getContentPane(); 
         
         date = new DateLabel(model);
         alarm = new AlarmLabel(model);
@@ -44,7 +43,7 @@ public class View extends JFrame {
         menuBar.add(menu);
         setJMenuBar(menuBar);
         
-        date.setVisible(false);
+        date.setVisible(false); // Date is initially not visible untill specified from menu
         
         ClickActionListener clickListen = new ClickActionListener();
         
@@ -66,45 +65,44 @@ public class View extends JFrame {
         setVisible(true);
     }
     
-    // Inner class for actionlistener TODO does this effectively follow MVC pattern?
+    // Inner class for action listeners on all view UI elements
     class ClickActionListener extends JComponent implements ActionListener  {
+        
         @Override
         public void actionPerformed(ActionEvent ae) {
             if("About".equals(ae.getActionCommand())) {
                 JOptionPane.showMessageDialog(this, "Java Clock by Gavin Bruce");
             } else if("Analog".equals(ae.getActionCommand())) {
                 model.display = "analog";
-                new View(model);
+                new View(model); // Adds another view frame observing the model as an analog clock
             } else if("Digital".equals(ae.getActionCommand())) {
                 model.display = "digital";
-                new View(model);
+                new View(model); // Adds another view frame observing the model as a digital clock
             } else if("Display Date".equals(ae.getActionCommand())) {
-                if(date.isVisible()) date.setVisible(false); 
+                if(date.isVisible()) date.setVisible(false); // Toggles date display visibilty through date checkbox in menu
                 else date.setVisible(true);
             } else if("Add Alarm".equals(ae.getActionCommand())) {
-                AlarmPanel setAlarm = new AlarmPanel(model); //setup alarm panel with current model time
+                AlarmPanel setAlarm = new AlarmPanel(model); // Setup alarm panel with current model time
                 
-                int result = JOptionPane.showConfirmDialog(this, setAlarm, "Set Alarm", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+                int result = JOptionPane.showConfirmDialog(this, setAlarm, "Set Alarm", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE); // Displays add alarm dialog
                 
-                if(result  == JOptionPane.OK_OPTION) {
-                    model.alarm = new Alarm(model, setAlarm.getHour(), setAlarm.getMinute(), setAlarm.getAmPm(), setAlarm.getActive());
-                    System.out.println("Hour: "+ setAlarm.getHour()+" - Minute: "+ setAlarm.getMinute()+ " - AMPM: "+ setAlarm.getAmPm()+ " - Active: "+ setAlarm.getActive()); //DEBUG SETALARM GETTERS
+                if(result  == JOptionPane.OK_OPTION) { // Runs if ok button is selected through add alarm dialog
+                    model.alarm = new Alarm(model, setAlarm.getHour(), setAlarm.getMinute(), setAlarm.getAmPm(), setAlarm.getActive()); // Adds new alarm to model
+                    //System.out.println("Hour: "+ setAlarm.getHour()+" - Minute: "+ setAlarm.getMinute()+ " - AMPM: "+ setAlarm.getAmPm()+ " - Active: "+ setAlarm.getActive()); //DEBUG SETALARM GETTERS
                 }
             } else if("Edit Alarm".equals(ae.getActionCommand())) {
-                Object[] options = {"Save","Delete"}; //array for custom button text
-                AlarmPanel editAlarm = new AlarmPanel(model.alarm); //setup alarm panel with current alarm that is set
+                Object[] options = {"Save","Delete"}; // Array for custom button text
+                AlarmPanel editAlarm = new AlarmPanel(model.alarm); // Setup alarm panel with current alarm that is set in model
                 
-                int result = JOptionPane.showOptionDialog(this, editAlarm, "Edit Alarm", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, null);
+                int result = JOptionPane.showOptionDialog(this, editAlarm, "Edit Alarm", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, null); // Displays edit alarm dialog with current alarm in model
                 
-                if(result  == JOptionPane.YES_OPTION) {
-                    model.alarm = new Alarm(model, editAlarm.getHour(), editAlarm.getMinute(), editAlarm.getAmPm(), editAlarm.getActive());
-                    
-                    System.out.println("Hour: "+ editAlarm.getHour()+" - Minute: "+ editAlarm.getMinute()+ " - AMPM: "+ editAlarm.getAmPm()+ " - Active: "+ editAlarm.getActive()); //DEBUG SETALARM GETTERS
-                } else if(result  == JOptionPane.NO_OPTION) {
-                    model.alarm = null; // delete alarm
+                if(result  == JOptionPane.YES_OPTION) { // Runs if user selects save in edit alarm dialog
+                    model.alarm = new Alarm(model, editAlarm.getHour(), editAlarm.getMinute(), editAlarm.getAmPm(), editAlarm.getActive()); // Assigns models alarm with new changes - DOESNT USE SETTERS
+                    //System.out.println("Hour: "+ editAlarm.getHour()+" - Minute: "+ editAlarm.getMinute()+ " - AMPM: "+ editAlarm.getAmPm()+ " - Active: "+ editAlarm.getActive()); //DEBUG SETALARM GETTERS
+                } else if(result  == JOptionPane.NO_OPTION) { // Runs if user selects delete in edit alarm dialog
+                    model.alarm = null; // Deletes alarm in model
                 }
             }
         }
-    
     }
 }

@@ -1,44 +1,26 @@
 import java.awt.*;
-import java.awt.event.*;
 import java.awt.geom.*;
 import java.awt.font.*;
-import java.util.Observable;
-import javax.swing.*;
 
 public class AnalogClockPanel extends ClockPanel { 
 
     public AnalogClockPanel(Model m) {
-        super(m);
+        super(m); // Uses constructor of the parent abstract class
     }
-    //JPanel moved to abstract class
-    
-    //Model model; moved to abstract class
-    
-    /*public AnalogClockPanel(Model m) {
-        model = m;
-        setPreferredSize(new Dimension(200, 200));
-        setBackground(Color.white);
-    }*/
     
     @Override
     public void paintComponent(Graphics g) {
-        super.paintComponent(g);
+        super.paintComponent(g); // Calls this method from its parent class
         
         Rectangle bounds = getBounds();
-        //System.out.println(bounds);
         
         Graphics2D gg = (Graphics2D) g;
         int x0 = bounds.width / 2;
         int y0 = bounds.height / 2;
         
         int size = Math.min(x0, y0);
-        //gg.translate(x0, y0);
-        //gg.scale(size, size);
-        //gg.setStroke(new BasicStroke(0));
         
         gg.setStroke(new BasicStroke(1));
-        
-        // gg.draw(new Ellipse2D.Double(-1, -1, 2, 2));
         
         double radius = 0;
         double theta = 0;
@@ -60,7 +42,6 @@ public class AnalogClockPanel extends ClockPanel {
         }
         
         // Draw the numbers
-        // Font font = new Font("SansSerif", Font.BOLD, size / 5);
         Font font = new Font("SansSerif", Font.PLAIN, size / 5);
         gg.setFont(font);
         for (int n = 1; n <= 12; n++) {
@@ -105,8 +86,5 @@ public class AnalogClockPanel extends ClockPanel {
         x1 = x0 + radius * Math.cos(theta);
         y1 = y0 - radius * Math.sin(theta);
         gg.draw(new Line2D.Double(x0, y0, x1, y1));
-       
     }
-
-    
 }
