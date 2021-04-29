@@ -21,5 +21,10 @@ public class Controller {
         
         timer = new Timer(100, listener);
         timer.start();
+        
+        
     }
+    
+    //Alter view from here
+    
 }

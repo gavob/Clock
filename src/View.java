@@ -1,7 +1,12 @@
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Calendar;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.*;
+import queuemanager.QueueOverflowException;
+import queuemanager.QueueUnderflowException;
 
 public class View extends JFrame {
     
@@ -82,27 +87,87 @@ public class View extends JFrame {
                 if(date.isVisible()) date.setVisible(false); // Toggles date display visibilty through date checkbox in menu
                 else date.setVisible(true);
             } else if("Add Alarm".equals(ae.getActionCommand())) {
+                
                 AlarmPanel setAlarm = new AlarmPanel(model); // Setup alarm panel with current model time
                 
                 int result = JOptionPane.showConfirmDialog(this, setAlarm, "Set Alarm", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE); // Displays add alarm dialog
                 
-                if(result  == JOptionPane.OK_OPTION) { // Runs if ok button is selected through add alarm dialog
-                    model.alarm = new Alarm(model, setAlarm.getHour(), setAlarm.getMinute(), setAlarm.getAmPm(), setAlarm.getActive()); // Adds new alarm to model
-                    //System.out.println("Hour: "+ setAlarm.getHour()+" - Minute: "+ setAlarm.getMinute()+ " - AMPM: "+ setAlarm.getAmPm()+ " - Active: "+ setAlarm.getActive()); //DEBUG SETALARM GETTERS
+                if(result == JOptionPane.OK_OPTION) { // Runs if ok button is selected through add alarm dialog
+                    addAlarm(setAlarm);
                 }
+                
             } else if("Edit Alarm".equals(ae.getActionCommand())) {
-                Object[] options = {"Save","Delete"}; // Array for custom button text
-                AlarmPanel editAlarm = new AlarmPanel(model.alarm); // Setup alarm panel with current alarm that is set in model
+                AlarmSelectionPanel alarmChoice = new AlarmSelectionPanel(model);
                 
-                int result = JOptionPane.showOptionDialog(this, editAlarm, "Edit Alarm", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, null); // Displays edit alarm dialog with current alarm in model
+                int result = JOptionPane.showConfirmDialog(this, alarmChoice, "Select Alarm to Edit", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
                 
-                if(result  == JOptionPane.YES_OPTION) { // Runs if user selects save in edit alarm dialog
-                    model.alarm = new Alarm(model, editAlarm.getHour(), editAlarm.getMinute(), editAlarm.getAmPm(), editAlarm.getActive()); // Assigns models alarm with new changes - DOESNT USE SETTERS
-                    //System.out.println("Hour: "+ editAlarm.getHour()+" - Minute: "+ editAlarm.getMinute()+ " - AMPM: "+ editAlarm.getAmPm()+ " - Active: "+ editAlarm.getActive()); //DEBUG SETALARM GETTERS
-                } else if(result  == JOptionPane.NO_OPTION) { // Runs if user selects delete in edit alarm dialog
-                    model.alarm = null; // Deletes alarm in model
+                if(result == JOptionPane.OK_OPTION) {
+                    int selection = alarmChoice.getSelected(); // Get index of selected alarm
+                    try {
+                        Alarm alarm = model.alarms.head(selection); // Get selected alarm
+                        AlarmPanel editAlarm = new AlarmPanel(alarm); // Setup alarm panel with selected alarm
+                        Object[] options = {"Save","Delete"}; // Array for custom button text
+                        
+                        int editResult = JOptionPane.showOptionDialog(this, editAlarm, "Edit Alarm", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, null); // Displays edit alarm dialog
+                       
+                        if(editResult  == JOptionPane.YES_OPTION) { // Runs if user selects save in edit alarm dialog
+                            model.alarms.remove(selection); // Deletes old version of alarm
+                            
+                            addAlarm(editAlarm);
+                        } else if(editResult  == JOptionPane.NO_OPTION) { // Runs if user selects delete in edit alarm dialog
+                            model.alarms.remove(selection); // Deletes alarm from list
+                        }
+                    } catch (QueueUnderflowException ex) {
+                        Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
+                    } 
+                }
+                
+                
+            }
+        }
+        
+        public void addAlarm(AlarmPanel setAlarm) {
+            Alarm newAlarm = new Alarm(model, 
+                setAlarm.getHour(), 
+                setAlarm.getMinute(), 
+                setAlarm.getAmPm(), 
+                setAlarm.getActive()); // Adds new alarm to model
+                    
+            if(model.alarms.isEmpty()) { // If priority queue is empty add new alarm
+                try {
+                    model.alarms.add(newAlarm, 1); // Add new alarm to empty priorityqueue
+                } catch (QueueOverflowException ex) {
+                    Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            } else {
+                Calendar cal = Calendar.getInstance();
+                long currentTS = cal.getTimeInMillis();
+                long newTS = newAlarm.getTimeStamp();
+                long currentDiff = newTS - currentTS;
+                int newPriority = 1;
+                
+                try {
+                    for (int i = 1; i <= model.alarmCount; i++) {
+                        long diff = model.alarms.head(i).getTimeStamp() - currentTS;
+
+                        if(currentDiff <= diff) {
+                            newPriority = i;
+                            break;
+                        } else newPriority++;
+                    }
+                } catch (QueueUnderflowException ex) {
+                    Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+                try {
+                    model.alarms.add(newAlarm, newPriority); // Add new alarm to linked list queue
+                } catch (QueueOverflowException ex) {
+                    Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         }
+        
     }
+    
+    
 }

@@ -4,8 +4,11 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import queuemanager.QueueUnderflowException;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -39,13 +42,23 @@ public class AlarmLabel extends JLabel implements Observer {
     public void paintComponent(Graphics g) { 
         super.paintComponent(g); // Call this method from its parent class
         
-        if(model.alarm != null) { // Run code if there is an alarm
-            if(model.alarm.getActive()) setBackground(Color.green); else setBackground(Color.lightGray); // Set background as green if alarm is active
-            setText(model.alarm.getTime()); // Display time of alarm
+        
+        if(model.alarms.isEmpty() == false) { // Run code if there is an alarm
+            Alarm alarm;
+           
+            try {
+                alarm = (Alarm) model.alarms.head();
+
+                if(alarm.getActive()) setBackground(Color.green); else setBackground(Color.lightGray); // Set background as green if alarm is active
+                setText(alarm.getTime()); // Display time of alarm
+            } catch (QueueUnderflowException ex) {
+                Logger.getLogger(AlarmLabel.class.getName()).log(Level.SEVERE, null, ex);
+            }
         } else {
             setBackground(Color.lightGray);
             setText("No alarms set"); // Set text for when there are no alarms
         }
+        
     }
     
 }
