@@ -3,14 +3,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.io.OutputStream;
-import static java.nio.channels.Channels.newOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Calendar;
@@ -19,6 +12,10 @@ import java.util.logging.Logger;
 import javax.swing.*;
 import queuemanager.QueueOverflowException;
 import queuemanager.QueueUnderflowException;
+
+/*
+* Gavin Bruce - 11000148
+*/
 
 public class View extends JFrame {
     
@@ -77,57 +74,58 @@ public class View extends JFrame {
         
         setContentPane(pane);
         setTitle("Java Clock");
-        //setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        
         addWindowListener(new WindowAdapter() { // Run when closed to prompt user to save alarms
             @Override
-            public void windowClosing(WindowEvent e) {
-                int result = JOptionPane.showConfirmDialog(null, "Save Alarms?", "Save", JOptionPane.OK_CANCEL_OPTION); // Query user to save alarms dialog
+            public void windowClosing(WindowEvent e) { 
+                if(model.alarms.isEmpty() == false) { // Only prompt user if there is alarms to be saved
+                    int result = JOptionPane.showConfirmDialog(null, "Save Alarms?", "Save", JOptionPane.OK_CANCEL_OPTION); // Query user to save alarms dialog
                 
-                if(result == JOptionPane.OK_OPTION) {
-                    String alarmFile = "BEGIN:VCALENDAR\r\nVERSION:2.0";
-                    alarmFile += "\r\nPRODID:1\r\nBEGIN:VEVENT\r\nDTSTAMP:20210324T120000Z";
-                    alarmFile += "\r\nUID:uidgav@example.com\r\nDTSTART:20210413T141711Z";
-                    
-                    for(int i=1; i<=model.alarmCount; i++) {
-                        try { 
-                            Alarm a = model.alarms.head(i);
-                            int hr;
-                            int mn = a.getMinute();
-                            
-                            if("pm".equals(a.getAmPm())) {
-                                hr = a.getHour() + 12;
-                                if(hr==24) hr = 0;
-                            } else hr = a.getHour();
-                            
-                            alarmFile += "\r\nBEGIN:VALARM";
-                            alarmFile += "\r\nTRIGGER;VALUE=DATE-TIME:20210317T";
-                            if(hr<10) alarmFile += "0";
-                            alarmFile += hr;
-                            if(mn<10) alarmFile += "0";
-                            alarmFile += mn;
-                            alarmFile += "00Z";
-                            alarmFile += "\r\nREPEAT:1\r\nDURATION:PT1M";
-                            alarmFile += "\r\nACTION:AUDIO\r\nEND:VALARM";
-                        } catch (QueueUnderflowException ex) { Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex); }
-                    }
-                    
-                    alarmFile += "\r\nEND:VEVENT\r\nEND:VCALENDAR";
-                    
-                    try {
-                        Files.write(Paths.get("c:/alarms.ics"), alarmFile.getBytes());
-                    } catch (IOException ex) {
-                        Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                    
-                    
-                    JOptionPane.showMessageDialog(null,"Alarms Saved");
-                    
-                    System.exit(0); 
-                } else System.exit(0); 
+                    if(result == JOptionPane.OK_OPTION) { 
+                        String alarmFile = "BEGIN:VCALENDAR\r\nVERSION:2.0"; // Starting text of ical file
+                        alarmFile += "\r\nPRODID:1\r\nBEGIN:VEVENT\r\nDTSTAMP:20210324T120000Z";
+                        alarmFile += "\r\nUID:uidgav@example.com\r\nDTSTART:20210413T141711Z";
+
+                        for(int i=1; i<=model.alarmCount; i++) { // Repeats adding this text for each alarm
+                            try { 
+                                Alarm a = model.alarms.head(i); // Retrieve alarm
+                                int hr;
+                                int mn = a.getMinute();
+
+                                if("pm".equals(a.getAmPm())) {
+                                    hr = a.getHour() + 12;
+                                    if(hr==24) hr = 0;
+                                } else hr = a.getHour();
+
+                                alarmFile += "\r\nBEGIN:VALARM";
+                                alarmFile += "\r\nTRIGGER;VALUE=DATE-TIME:20210317T";
+                                if(hr<10) alarmFile += "0";
+                                alarmFile += hr; // Add hour 
+                                if(mn<10) alarmFile += "0";
+                                alarmFile += mn; // Add minute
+                                alarmFile += "00Z";
+                                alarmFile += "\r\nREPEAT:1\r\nDURATION:PT1M";
+                                alarmFile += "\r\nACTION:AUDIO\r\nEND:VALARM";
+                            } catch (QueueUnderflowException ex) { Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex); }
+                        }
+
+                        alarmFile += "\r\nEND:VEVENT\r\nEND:VCALENDAR";
+
+                        try {
+                            Files.write(Paths.get("c:/alarms.ics"), alarmFile.getBytes()); // Write the ical file to c drive
+                            JOptionPane.showMessageDialog(null,"Alarms Saved"); // Confirm alarms have been saved
+                        } catch (IOException ex) {
+                            Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                        System.exit(0); 
+                    } else System.exit(0); 
+                } else System.exit(0);
             }
         });
+        
         pack();
         setVisible(true);
+                
     }
     
     // Inner class for action listeners on all view UI elements
@@ -208,12 +206,12 @@ public class View extends JFrame {
                 
                 try {
                     for (int i = 1; i <= model.alarmCount; i++) {
-                        long diff = model.alarms.head(i).getTimeStamp() - currentTS;
+                        long diff = model.alarms.head(i).getTimeStamp() - currentTS; // Get time difference between alarm being checked in queue and current time 
 
-                        if(currentDiff <= diff) {
+                        if(currentDiff <= diff) { // If time difference of added alarm is less or equal to one in queue then added alarm takes its priority
                             newPriority = i;
                             break;
-                        } else newPriority++;
+                        } else newPriority++; 
                     }
                 } catch (QueueUnderflowException ex) {
                     Logger.getLogger(View.class.getName()).log(Level.SEVERE, null, ex);

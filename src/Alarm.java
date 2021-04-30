@@ -1,3 +1,4 @@
+import java.awt.Toolkit;
 import java.util.Calendar;
 import java.util.Observable;
 import java.util.Observer;
@@ -6,15 +7,9 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import queuemanager.QueueUnderflowException;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /**
  *
- * @author Gav
+ * @author Gavin Bruce - 11000148
  */
 public class Alarm implements Observer {
     
@@ -51,7 +46,8 @@ public class Alarm implements Observer {
     @Override
     public void update(Observable o, Object o1) { // Called every second so that alarm instance is always observing changes in model
         if(model.hour==hour && model.minute==minute && model.second == 0 && model.amPm==amPm && active) { // If model time matches alarm time code within runs
-            JOptionPane.showMessageDialog(null,"ALARM"); // Calls alarm
+            JOptionPane.showMessageDialog(null,"ALARM"); // Calls alarm pop up dialog
+            Toolkit.getDefaultToolkit().beep(); // Makes a sound when alarm activates
             try {
                 model.alarms.remove(); // Removes alarm
             } catch (QueueUnderflowException ex) {

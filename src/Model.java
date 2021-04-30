@@ -1,20 +1,18 @@
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Observable;
-import java.util.PriorityQueue;
-import queuemanager.SortedArrayPriorityQueue;
 import queuemanager.SortedLinkedList;
-import queuemanager.SortedLinkedListPriorityQueue;
-//import java.util.GregorianCalendar;
+
+/*
+* Gavin Bruce - 11000148
+*/
 
 public class Model extends Observable {
-    SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+    SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy"); // Formatting object for making date more readble
     String display = "analog";
     String day;
-    //Alarm alarm = null; //For single alarm
     int alarmCount;
-    SortedLinkedList<Alarm> alarms = new SortedLinkedList(); // Prioirty queue of alarms
+    SortedLinkedList<Alarm> alarms = new SortedLinkedList(); 
     int hour = 0;
     int minute = 0;
     int second = 0;
@@ -29,9 +27,7 @@ public class Model extends Observable {
         Calendar date = Calendar.getInstance();
         
         alarmCount = alarms.getSize();
-        
         day = dateFormat.format(date.getTime()); // Formats date for date label
-        
         hour = date.get(Calendar.HOUR);
         if(hour==0) hour = 12; // Incase it displays 0 o'clock - set it to 12
         minute = date.get(Calendar.MINUTE);

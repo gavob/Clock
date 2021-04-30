@@ -1,4 +1,3 @@
-
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import javax.swing.ButtonGroup;
@@ -10,15 +9,9 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /**
  *
- * @author Gav
+ * @author Gavin Bruce - 11000148
  */
 public class AlarmPanel extends JPanel {
      
