@@ -53,7 +53,7 @@ public class Alarm implements Observer {
         if(model.hour==hour && model.minute==minute && model.second == 0 && model.amPm==amPm && active) { // If model time matches alarm time code within runs
             JOptionPane.showMessageDialog(null,"ALARM"); // Calls alarm
             try {
-                model.alarms.remove();
+                model.alarms.remove(); // Removes alarm
             } catch (QueueUnderflowException ex) {
                 Logger.getLogger(Alarm.class.getName()).log(Level.SEVERE, null, ex);
             }
